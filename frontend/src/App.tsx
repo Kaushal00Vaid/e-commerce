@@ -11,6 +11,10 @@ import EditProduct from "./pages/admin/EditProduct.tsx";
 import Home from "./pages/Home.tsx";
 import Products from "./pages/Products.tsx";
 import ProductDetails from "./pages/ProductDetails.tsx";
+import Cart from "./pages/Cart.tsx";
+import Checkout from "./pages/Checkout.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import Orders from "./pages/Orders.tsx";
 
 function App() {
   return (
@@ -19,6 +23,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -44,6 +49,25 @@ function App() {
             <AdminProtectedRoute>
               <EditProduct />
             </AdminProtectedRoute>
+          }
+        />
+
+        {/* PROTECTED ROUTES */}
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
           }
         />
       </Routes>

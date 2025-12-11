@@ -3,10 +3,11 @@ import { getCartItems, saveCartItems, type CartItem } from "../utils/cart";
 
 interface CartContextType {
   cart: CartItem[];
-  add: (item: CartItem) => void;
+  add: (item: CartItem, stock?: number) => void; // stock added
   remove: (productId: string) => void;
-  increment: (productId: string) => void;
+  increment: (productId: string, stock?: number) => void; // stock added
   decrement: (productId: string) => void;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -23,14 +24,23 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     saveCartItems(items);
   };
 
-  const add = (item: CartItem) => {
+  const clearCart = () => {
+    sync([]);
+  };
+
+  const add = (item: CartItem, stock: number = Infinity) => {
     const existing = cart.find((c) => c.productId === item.productId);
 
     if (existing) {
-      existing.quantity += 1;
-      sync([...cart]);
+      if (existing.quantity < stock) {
+        existing.quantity += 1;
+        sync([...cart]);
+      } else {
+        alert("Cannot add more than available stock!");
+      }
     } else {
-      sync([...cart, item]);
+      if (stock > 0) sync([...cart, item]);
+      else alert("Out of stock!");
     }
   };
 
@@ -38,11 +48,18 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     sync(cart.filter((c) => c.productId !== productId));
   };
 
-  const increment = (productId: string) => {
+  const increment = (productId: string, stock: number = Infinity) => {
     sync(
-      cart.map((c) =>
-        c.productId === productId ? { ...c, quantity: c.quantity + 1 } : c
-      )
+      cart.map((c) => {
+        if (c.productId === productId) {
+          if (c.quantity < stock) return { ...c, quantity: c.quantity + 1 };
+          else {
+            alert("Cannot exceed available stock!");
+            return c;
+          }
+        }
+        return c;
+      })
     );
   };
 
@@ -59,7 +76,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, add, remove, increment, decrement }}>
+    <CartContext.Provider
+      value={{ cart, add, remove, increment, decrement, clearCart }}
+    >
       {children}
     </CartContext.Provider>
   );

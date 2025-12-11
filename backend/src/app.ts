@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes";
 import adminAuthRoutes from "./routes/adminAuth.routes";
 import productRoutes from "./routes/product.routes";
 import uploadRoutes from "./routes/upload.routes";
+import orderRoutes from "./routes/order.routes";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -25,6 +27,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin/auth", adminAuthRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/uploads", uploadRoutes);
+
+app.use("/api/orders", orderRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });

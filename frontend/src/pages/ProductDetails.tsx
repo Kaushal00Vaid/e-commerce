@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Product } from "../types/Product";
 import { addToCart } from "../utils/cart";
 import { useCart } from "../context/CartContext";
@@ -12,6 +12,7 @@ const ProductDetails = () => {
   const userToken = localStorage.getItem("token");
 
   const { cart, add, increment, decrement } = useCart();
+  const navigate = useNavigate();
 
   const cartItem = product
     ? cart.find((c) => c.productId === product._id)
@@ -27,27 +28,7 @@ const ProductDetails = () => {
       return;
     }
 
-    const body = {
-      items: [{ product: product!._id, quantity: 1 }],
-      totalAmount: product!.price,
-    };
-
-    const res = await fetch("http://localhost:5000/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userToken}`,
-      },
-      body: JSON.stringify(body),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("Order placed successfully!");
-    } else {
-      alert(data.message || "Order failed");
-    }
+    navigate("/checkout");
   };
 
   const fetchProduct = async () => {
@@ -143,8 +124,8 @@ const ProductDetails = () => {
                 </span>
 
                 <button
-                  onClick={() => increment(product._id)}
-                  className="w-10 h-10 text-xl border border-[#8B5E34] rounded"
+                  onClick={() => increment(product._id, product.stock)}
+                  className="w-10 h-10 text-xl border rounded"
                 >
                   +
                 </button>
@@ -161,15 +142,18 @@ const ProductDetails = () => {
             ) : (
               <button
                 onClick={() =>
-                  add({
-                    productId: product._id,
-                    name: product.name,
-                    price: product.price,
-                    image: product.images?.[0]?.url || "",
-                    quantity: 1,
-                  })
+                  add(
+                    {
+                      productId: product._id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.images?.[0]?.url || "",
+                      quantity: 1,
+                    },
+                    product.stock // pass stock here
+                  )
                 }
-                className="w-full bg-[#8B5E34] text-white py-3 rounded-lg"
+                className="w-full bg-black text-white py-3 rounded-lg"
               >
                 Add to Cart
               </button>

@@ -23,7 +23,7 @@ export default function userAuth(
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET_USER as string
+      process.env.JWT_SECRET as string
     ) as TokenPayload;
 
     req.user = { id: decoded.id };

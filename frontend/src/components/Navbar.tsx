@@ -12,9 +12,11 @@ const Navbar = () => {
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const token = localStorage.getItem("token");
+  const adminToken = localStorage.getItem("adminToken");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
     navigate("/");
   };
 
@@ -58,7 +60,7 @@ const Navbar = () => {
               )}
             </NavLink>
 
-            {!token ? (
+            {!token && !adminToken ? (
               <button
                 onClick={() => navigate("/login")}
                 className="ml-4 px-5 py-2 rounded-full bg-primary text-white font-semibold shadow-sm hover:shadow-md transition"
