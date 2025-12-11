@@ -3,6 +3,10 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
+import adminAuthRoutes from "./routes/adminAuth.routes";
+import productRoutes from "./routes/product.routes";
+import uploadRoutes from "./routes/upload.routes";
+
 const app = express();
 
 app.use(express.json());
@@ -18,6 +22,9 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/uploads", uploadRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });

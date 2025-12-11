@@ -23,6 +23,7 @@ passport.use(
             email,
             avatar,
             provider: "google",
+            role: "user",
           });
         }
 

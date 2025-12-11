@@ -1,7 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import AuthSuccess from "./pages/AuthSuccess.tsx";
+
 import "./App.css";
+import AdminLogin from "./pages/admin/AdminLogin.tsx";
+import AdminProducts from "./pages/admin/AdminProducts.tsx";
+import AdminProtectedRoute from "./components/AdminProtectedRoute.tsx";
+import AdminAddProduct from "./pages/admin/AdminAddProduct.tsx";
+import EditProduct from "./pages/admin/EditProduct.tsx";
 
 function App() {
   return (
@@ -10,6 +16,31 @@ function App() {
         <Route path="/" element={<h1>Home Page</h1>} />
         <Route path="/login" element={<Login />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/products"
+          element={
+            <AdminProtectedRoute>
+              <AdminProducts />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products/new"
+          element={
+            <AdminProtectedRoute>
+              <AdminAddProduct />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products/edit/:id"
+          element={
+            <AdminProtectedRoute>
+              <EditProduct />
+            </AdminProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
