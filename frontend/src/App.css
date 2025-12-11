@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+body {
+  font-family: Inter, sans-serif;
+}
+
+.font-serif {
+  font-family: "Playfair Display", serif;
+}
+
+:root {
+  --primary: #aa6f3d; /* Earthen brown */
+  --primary-light: #d9b28c; /* Clay beige */
+  --paper: #faf7f2; /* Soft minimal background */
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.text-primary {
+  color: var(--primary);
+}

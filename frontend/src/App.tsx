@@ -8,12 +8,17 @@ import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import AdminProtectedRoute from "./components/AdminProtectedRoute.tsx";
 import AdminAddProduct from "./pages/admin/AdminAddProduct.tsx";
 import EditProduct from "./pages/admin/EditProduct.tsx";
+import Home from "./pages/Home.tsx";
+import Products from "./pages/Products.tsx";
+import ProductDetails from "./pages/ProductDetails.tsx";
 
 function App() {
   return (
-    <>
+    <div className="main-content">
       <Routes>
-        <Route path="/" element={<h1>Home Page</h1>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -42,7 +47,7 @@ function App() {
           }
         />
       </Routes>
-    </>
+    </div>
   );
 }
 

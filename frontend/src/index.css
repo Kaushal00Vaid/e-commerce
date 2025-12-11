@@ -1,0 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap");
+
+@tailwind: root {
+  --primary: #865439;
+  --secondary: #c68b59;
+  --accent: #eed6c4;
+  --background: #faf4ef;
+  --dark: #2f2f2f;
+}
+
+/* Utility helpers */
+.bg-hero {
+  background: linear-gradient(
+    180deg,
+    rgba(238, 214, 196, 0.25),
+    rgba(250, 244, 239, 0.25)
+  );
+  /* url("https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=..."); */
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+.text-primary {
+  color: var(--primary);
+}
+.bg-primary {
+  background-color: var(--primary);
+}
+.text-dark {
+  color: var(--dark);
+}
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.main-content {
+  padding-top: 64px;
+}
