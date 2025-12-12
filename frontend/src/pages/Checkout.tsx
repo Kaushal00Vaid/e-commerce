@@ -34,7 +34,7 @@ export default function Checkout() {
 
       // 1. API Call
       await axios.post(
-        "http://localhost:5000/api/orders/create",
+        `${import.meta.env.VITE_API_URL}/orders/create`,
         {
           items,
           totalAmount: total,

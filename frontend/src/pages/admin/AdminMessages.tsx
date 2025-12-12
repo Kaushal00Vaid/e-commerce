@@ -17,11 +17,14 @@ export default function AdminMessages() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/contacts", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-          },
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/contacts`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            },
+          }
+        );
         setMessages(res.data.contacts);
       } catch (err) {
         console.error("Failed to fetch messages");

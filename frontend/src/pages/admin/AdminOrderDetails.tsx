@@ -18,7 +18,7 @@ export default function AdminOrderDetails() {
 
   const fetchOrder = async () => {
     const res = await axios.get(
-      `http://localhost:5000/api/admin/orders/${id}`,
+      `${import.meta.env.VITE_API_URL}/admin/orders/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,

@@ -36,7 +36,7 @@ const ProductDetails = () => {
 
   const fetchProduct = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/products/${id}`);
       const data = await res.json();
 
       // Backend returns product directly, not { product: ... }

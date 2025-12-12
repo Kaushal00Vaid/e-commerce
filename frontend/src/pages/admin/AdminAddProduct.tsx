@@ -21,12 +21,16 @@ export const uploadFilesToServer = async (files: File[]) => {
   files.forEach((f) => form.append("images", f));
 
   const token = localStorage.getItem("adminToken");
-  const res = await axios.post("http://localhost:5000/api/uploads", form, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await axios.post(
+    `${import.meta.env.VITE_API_URL}/uploads`,
+    form,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   return res.data.uploaded.map((u: any) => u.url);
 };
@@ -66,12 +70,16 @@ export default function AdminAddProduct() {
       const form = new FormData();
       selectedFiles.forEach((f) => form.append("images", f));
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("http://localhost:5000/api/uploads", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/uploads`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const uploadedImages = res.data.uploaded;
       setImageUrls(uploadedImages);
@@ -91,7 +99,7 @@ export default function AdminAddProduct() {
     const token = localStorage.getItem("adminToken");
     try {
       await axios.post(
-        "http://localhost:5000/api/products",
+        `${import.meta.env.VITE_API_URL}/products`,
         {
           name,
           description,

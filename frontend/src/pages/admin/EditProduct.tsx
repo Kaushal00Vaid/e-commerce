@@ -26,7 +26,7 @@ const EditProduct = () => {
   const fetchProduct = async () => {
     const token = localStorage.getItem("adminToken");
 
-    const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/products/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -50,7 +50,7 @@ const EditProduct = () => {
     formData.append("images", files[0]);
 
     // Show temporary loading state if you wanted, or just wait
-    const res = await fetch("http://localhost:5000/api/uploads", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/uploads`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
@@ -72,7 +72,7 @@ const EditProduct = () => {
 
     const updatedImages = currentImage ? [currentImage] : [];
 
-    const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/products/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

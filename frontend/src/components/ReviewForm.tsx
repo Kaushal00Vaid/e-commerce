@@ -29,7 +29,7 @@ export default function ReviewForm({ productId, onReviewAdded }: Props) {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:5000/api/reviews",
+        `${import.meta.env.VITE_API_URL}/reviews`,
         { productId, rating, comment },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -16,7 +16,7 @@ export default function ReviewList({ productId, refreshTrigger }: Props) {
     const fetchReviews = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/reviews/${productId}`
+          `${import.meta.env.VITE_API_URL}/reviews/${productId}`
         );
         setReviews(res.data.reviews);
       } catch (err) {

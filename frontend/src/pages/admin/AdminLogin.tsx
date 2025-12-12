@@ -9,7 +9,7 @@ export default function AdminLogin() {
   async function handleLogin() {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/admin/auth/login",
+        `${import.meta.env.VITE_API_URL}/admin/auth/login`,
         {
           email,
           password,

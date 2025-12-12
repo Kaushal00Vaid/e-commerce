@@ -25,11 +25,14 @@ export default function AdminOrders() {
   const [filter, setFilter] = useState<keyof typeof FILTERS>("pending");
 
   const fetchOrders = async () => {
-    const res = await axios.get("http://localhost:5000/api/admin/orders", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-      },
-    });
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/admin/orders`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+        },
+      }
+    );
     setOrders(res.data.orders);
   };
 
@@ -39,7 +42,7 @@ export default function AdminOrders() {
 
   const updateStatus = async (orderId: string, status: string) => {
     await axios.put(
-      `http://localhost:5000/api/admin/orders/${orderId}/status`,
+      `${import.meta.env.VITE_API_URL}/admin/orders/${orderId}/status`,
       { status },
       {
         headers: {

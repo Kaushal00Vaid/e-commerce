@@ -6,7 +6,6 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  AlertCircle,
   ShoppingBag,
 } from "lucide-react";
 
@@ -15,7 +14,7 @@ export default function Orders() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/orders/my-orders", {
+      .get(`${import.meta.env.VITE_API_URL}/orders/my-orders`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((res) => setOrders(res.data))
