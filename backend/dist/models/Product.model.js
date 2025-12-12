@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+const productScehema = new mongoose_1.Schema({
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+    images: [
+        {
+            url: { type: String, required: true },
+            public_id: { type: String, required: true },
+        },
+    ],
+    stock: { type: Number, required: true },
+    category: { type: String, required: true },
+    tags: [String],
+    isFeatured: { type: Boolean, default: false },
+}, {
+    timestamps: true,
+});
+exports.default = (0, mongoose_1.model)("Product", productScehema);
