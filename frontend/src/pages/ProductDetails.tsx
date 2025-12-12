@@ -3,11 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { Product } from "../types/Product";
 import { useCart } from "../context/CartContext";
 import { ChevronLeft, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import ReviewForm from "../components/ReviewForm";
+import ReviewList from "../components/ReviewList";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedImg, setSelectedImg] = useState<string>("");
+  const [refreshReviews, setRefreshReviews] = useState(0);
   const [loading, setLoading] = useState(true);
   const userToken = localStorage.getItem("token");
 
@@ -204,6 +207,41 @@ const ProductDetails = () => {
             </button>
           </div>
         </div>
+      </div>
+      {/* REVIEW */}
+      <div className="h-[1px] w-full bg-[#D4AF37]/20 my-16"></div>
+
+      {/* REVIEWS SECTION */}
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-serif font-bold text-[#D4AF37] mb-8 text-center flex items-center justify-center gap-3">
+          <span className="h-[1px] w-12 bg-[#D4AF37]/50"></span>
+          Artisan Reviews
+          <span className="h-[1px] w-12 bg-[#D4AF37]/50"></span>
+        </h2>
+
+        {/* Show Form only if user is logged in */}
+        {userToken ? (
+          <ReviewForm
+            productId={id || ""}
+            onReviewAdded={() => setRefreshReviews((prev) => prev + 1)}
+          />
+        ) : (
+          <div className="bg-[#3D2459]/30 p-6 rounded-xl text-center mb-8 border border-[#D4AF37]/10">
+            <p className="text-[#CAB8D9]">
+              Please{" "}
+              <button
+                className="text-[#D4AF37] font-bold hover:underline"
+                onClick={() => navigate("/login")}
+              >
+                login
+              </button>{" "}
+              to leave a review.
+            </p>
+          </div>
+        )}
+
+        {/* Reviews List */}
+        <ReviewList productId={id || ""} refreshTrigger={refreshReviews} />
       </div>
     </div>
   );

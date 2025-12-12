@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, Save, Image as ImageIcon, Loader2 } from "lucide-react";
 
+// Define the shape of the image object
+interface ImageData {
+  url: string;
+  public_id: string;
+}
+
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [imageUrl, setImageUrl] = useState("");
+
+  const [currentImage, setCurrentImage] = useState<ImageData | null>(null);
+
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -25,19 +33,23 @@ const EditProduct = () => {
     const data = await res.json();
 
     setProduct(data);
-    setImageUrl(data.images?.[0]?.url || ""); // Adjusted to handle object structure if needed
+
+    if (data.images && data.images.length > 0) {
+      setCurrentImage(data.images[0]);
+    }
+
     setLoading(false);
   };
 
   const handleImageUpload = async (e: any) => {
     const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append("images", files[i]);
-    }
 
-    // You might want to add a loading state for upload here
+    formData.append("images", files[0]);
+
+    // Show temporary loading state if you wanted, or just wait
     const res = await fetch("http://localhost:5000/api/uploads", {
       method: "POST",
       headers: {
@@ -47,8 +59,10 @@ const EditProduct = () => {
     });
 
     const data = await res.json();
+
     if (data.uploaded && data.uploaded.length > 0) {
-      setImageUrl(data.uploaded[0].url);
+      const newImage = data.uploaded[0];
+      setCurrentImage(newImage);
     }
   };
 
@@ -56,8 +70,7 @@ const EditProduct = () => {
     setSaving(true);
     const token = localStorage.getItem("adminToken");
 
-    // Construct image array correctly based on backend expectation
-    const updatedImages = imageUrl ? [{ url: imageUrl }] : [];
+    const updatedImages = currentImage ? [currentImage] : [];
 
     const res = await fetch(`http://localhost:5000/api/products/${id}`, {
       method: "PUT",
@@ -74,7 +87,8 @@ const EditProduct = () => {
     if (res.ok) {
       navigate("/admin/products");
     } else {
-      alert("Update failed");
+      const err = await res.json();
+      alert(`Update failed: ${err.message || "Unknown error"}`);
     }
     setSaving(false);
   };
@@ -202,10 +216,11 @@ const EditProduct = () => {
               </label>
               <div className="flex items-start gap-6">
                 <div className="w-32 h-32 bg-[#24123a] border border-[#D4AF37]/30 rounded-lg overflow-hidden flex-shrink-0">
-                  {imageUrl ? (
+                  {currentImage ? (
                     <img
-                      src={imageUrl}
+                      src={currentImage.url}
                       className="w-full h-full object-cover"
+                      alt="Product"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-[#CAB8D9] text-xs">
@@ -217,7 +232,6 @@ const EditProduct = () => {
                   <input
                     type="file"
                     onChange={handleImageUpload}
-                    multiple
                     accept="image/*"
                     className="block w-full text-sm text-[#CAB8D9]
                                 file:mr-4 file:py-2 file:px-4

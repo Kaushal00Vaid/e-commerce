@@ -8,6 +8,8 @@ import productRoutes from "./routes/product.routes";
 import uploadRoutes from "./routes/upload.routes";
 import orderRoutes from "./routes/order.routes";
 import adminOrderRoutes from "./routes/adminOrder.routes";
+import reviewRoutes from "./routes/review.routes";
+import contactRoutes from "./routes/contact.routes";
 
 const app = express();
 
@@ -28,6 +30,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin/auth", adminAuthRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/uploads", uploadRoutes);
+
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/contacts", contactRoutes);
 
 app.use("/api/orders", orderRoutes);
 

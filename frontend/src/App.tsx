@@ -18,6 +18,7 @@ import Orders from "./pages/Orders.tsx";
 import AdminOrders from "./pages/admin/AdminOrders.tsx";
 import AdminOrderDetails from "./pages/admin/AdminOrderDetails.tsx";
 import ContactPage from "./pages/Contact.tsx";
+import AdminMessages from "./pages/admin/AdminMessages";
 
 function App() {
   return (
@@ -53,6 +54,15 @@ function App() {
           element={
             <AdminProtectedRoute>
               <AdminOrders />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/messages"
+          element={
+            <AdminProtectedRoute>
+              <AdminMessages />
             </AdminProtectedRoute>
           }
         />

@@ -89,6 +89,9 @@ const Navbar = () => {
                 <NavLink to="/admin/orders" className={activeClass}>
                   Orders
                 </NavLink>
+                <NavLink to="/admin/messages" className={activeClass}>
+                  Messages
+                </NavLink>
               </>
             )}
 
