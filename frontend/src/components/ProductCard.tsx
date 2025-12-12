@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 interface Props {
   product: Product;
   onDelete?: (id: string) => void;
+  onEdit?: (id: string) => void;
 }
 
 export default function ProductCard({ product, onDelete }: Props) {
