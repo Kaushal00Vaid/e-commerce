@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface Props {
   product: Product;
-  onDelete?: (id: string) => void; // only admin passes this
+  onDelete?: (id: string) => void;
 }
 
 export default function ProductCard({ product, onDelete }: Props) {
@@ -13,49 +13,48 @@ export default function ProductCard({ product, onDelete }: Props) {
 
   const [index, setIndex] = React.useState(0);
 
-  // Auto-slider only if more than 1 image
+  // Auto-slider
   React.useEffect(() => {
     if (!product.images || product.images.length < 2) return;
-
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % product.images.length);
     }, 2500);
-
     return () => clearInterval(interval);
   }, [product.images]);
 
   const img = product.images?.[index]?.url;
 
   return (
-    <div className="bg-white shadow-sm rounded-xl p-4 border border-[#E8DCCB] hover:shadow-md transition">
+    // Card Background: Lighter Purple, Border: Subtle Gold
+    <div className="bg-[#3D2459] shadow-lg rounded-xl p-4 border border-[#D4AF37]/20 hover:border-[#D4AF37]/60 hover:shadow-xl transition duration-300 flex flex-col h-full">
       {/* IMAGE BLOCK */}
-      <div className="aspect-square w-full bg-[#EFE6DA] rounded-lg overflow-hidden">
+      <div className="aspect-square w-full bg-[#2E1A47] rounded-lg overflow-hidden relative">
         {img ? (
           <img
             src={img}
             alt={product.name}
-            className="w-full h-full object-cover transition-all duration-500"
+            className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-[#8B5E34]">
+          <div className="w-full h-full flex items-center justify-center text-[#CAB8D9] italic">
             No Image
           </div>
         )}
       </div>
 
       {/* PRODUCT NAME */}
-      <h3 className="mt-4 font-semibold text-lg text-[#4A2E14]">
+      <h3 className="mt-4 font-serif font-semibold text-xl text-[#D4AF37] tracking-wide">
         {product.name}
       </h3>
 
       {/* DESCRIPTION */}
-      <p className="text-sm text-gray-600 line-clamp-2">
+      <p className="text-sm text-[#CAB8D9] line-clamp-2 mt-2">
         {product.description}
       </p>
 
       {/* PRICE + BUTTONS */}
-      <div className="mt-3 flex justify-between items-center">
-        <span className="font-semibold text-[#8B5E34] text-lg">
+      <div className="mt-auto pt-4 flex justify-between items-center">
+        <span className="font-bold text-[#F3E5AB] text-lg">
           ₹{product.price}
         </span>
 
@@ -64,14 +63,14 @@ export default function ProductCard({ product, onDelete }: Props) {
           <div className="flex space-x-2">
             <button
               onClick={() => navigate(`/admin/products/edit/${product._id}`)}
-              className="px-3 py-2 bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-600 transition"
+              className="px-3 py-1.5 bg-[#D4AF37] text-[#2E1A47] rounded-lg text-sm font-semibold hover:bg-[#C5A065] transition"
             >
               Edit
             </button>
 
             <button
               onClick={() => onDelete?.(product._id)}
-              className="px-3 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition"
+              className="px-3 py-1.5 border border-red-400 text-red-400 rounded-lg text-sm hover:bg-red-400 hover:text-[#2E1A47] transition"
             >
               Delete
             </button>
@@ -79,7 +78,7 @@ export default function ProductCard({ product, onDelete }: Props) {
         ) : (
           <button
             onClick={() => navigate(`/products/${product._id}`)}
-            className="px-4 py-2 rounded-lg border border-[#8B5E34] text-[#8B5E34] hover:bg-[#8B5E34] hover:text-white transition"
+            className="px-4 py-2 rounded-lg border border-[#D4AF37] text-[#D4AF37] text-sm font-medium hover:bg-[#D4AF37] hover:text-[#2E1A47] transition duration-300"
           >
             View
           </button>
@@ -87,7 +86,7 @@ export default function ProductCard({ product, onDelete }: Props) {
       </div>
 
       {/* STOCK */}
-      <p className="text-sm text-gray-600 mt-2">
+      <p className="text-xs text-[#CAB8D9]/70 mt-2 text-right">
         {product.stock > 0 ? `In Stock: ${product.stock}` : "Out of Stock"}
       </p>
     </div>

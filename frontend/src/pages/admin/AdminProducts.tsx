@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { Product } from "../../types/Product";
 import ProductCard from "../../components/ProductCard";
+import {
+  LayoutDashboard,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+} from "lucide-react";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -64,50 +71,86 @@ const AdminProducts = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Products</h1>
-        <Link
-          to="/admin/products/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md"
-        >
-          + Add Product
-        </Link>
-      </div>
+    <div className="min-h-screen bg-[#2E1A47] text-[#F3E5AB] p-6 pt-24 md:p-10">
+      <div className="max-w-7xl mx-auto">
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 border-b border-[#D4AF37]/20 pb-8">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-[#3D2459] rounded-xl border border-[#D4AF37]/30 shadow-lg shadow-[#D4AF37]/5">
+              <LayoutDashboard className="text-[#D4AF37]" size={32} />
+            </div>
+            <div>
+              <h1 className="text-3xl font-serif font-bold text-[#F3E5AB]">
+                Inventory
+              </h1>
+              <p className="text-[#CAB8D9] text-sm">
+                Manage your collection and stock
+              </p>
+            </div>
+          </div>
 
-      {/* PRODUCT GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((p) => (
-          <ProductCard
-            key={p._id}
-            product={p}
-            onEdit={() => navigate(`/admin/products/edit/${p._id}`)}
-            onDelete={() => handleDelete(p._id)}
-          />
-        ))}
-      </div>
+          <Link
+            to="/admin/products/new"
+            className="group bg-[#D4AF37] text-[#2E1A47] px-6 py-3 rounded-lg font-bold shadow-lg shadow-[#D4AF37]/20 hover:bg-[#C5A065] transition flex items-center gap-2"
+          >
+            <Plus
+              size={20}
+              className="group-hover:rotate-90 transition duration-300"
+            />
+            Add New Product
+          </Link>
+        </div>
 
-      {/* PAGINATION */}
-      <div className="flex justify-center mt-6 space-x-4">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((p) => p - 1)}
-          className="px-4 py-2 border rounded bg-gray-100 disabled:opacity-50"
-        >
-          Prev
-        </button>
+        {/* EMPTY STATE */}
+        {products.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 bg-[#3D2459]/30 rounded-2xl border border-dashed border-[#D4AF37]/30">
+            <div className="w-16 h-16 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mb-4">
+              <Search className="text-[#D4AF37]" size={24} />
+            </div>
+            <p className="text-[#F3E5AB] font-serif text-xl">
+              No products found.
+            </p>
+            <p className="text-[#CAB8D9] text-sm mt-2">
+              Start by adding your first masterpiece.
+            </p>
+          </div>
+        ) : (
+          /* PRODUCT GRID */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products.map((p) => (
+              <ProductCard
+                key={p._id}
+                product={p}
+                onEdit={() => navigate(`/admin/products/edit/${p._id}`)}
+                onDelete={() => handleDelete(p._id)}
+              />
+            ))}
+          </div>
+        )}
 
-        <span className="px-4 py-2">
-          Page {page} of {totalPages}
-        </span>
+        {/* PAGINATION */}
+        <div className="flex justify-center items-center mt-12 space-x-6">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            className="flex items-center gap-2 px-5 py-2.5 border border-[#D4AF37]/40 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#2E1A47] transition disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#D4AF37]"
+          >
+            <ChevronLeft size={18} /> Prev
+          </button>
 
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage((p) => p + 1)}
-          className="px-4 py-2 border rounded bg-gray-100 disabled:opacity-50"
-        >
-          Next
-        </button>
+          <span className="px-4 py-2 text-[#CAB8D9] font-mono text-sm tracking-widest border border-[#D4AF37]/10 bg-[#3D2459] rounded-md">
+            PAGE <span className="text-[#F3E5AB] font-bold">{page}</span> /{" "}
+            {totalPages}
+          </span>
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+            className="flex items-center gap-2 px-5 py-2.5 border border-[#D4AF37]/40 rounded-lg text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#2E1A47] transition disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#D4AF37]"
+          >
+            Next <ChevronRight size={18} />
+          </button>
+        </div>
       </div>
     </div>
   );
