@@ -1,6 +1,6 @@
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import qrCode from "../assets/qr.png";
 import axios from "axios";
 
@@ -10,6 +10,12 @@ export default function Checkout() {
   const [paymentRef, setPaymentRef] = useState("");
 
   const total = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
+
+  useEffect(() => {
+    if (!cart || cart.length === 0) {
+      navigate("/cart");
+    }
+  }, [cart]);
 
   const handleOrder = async () => {
     if (!paymentRef.trim()) {

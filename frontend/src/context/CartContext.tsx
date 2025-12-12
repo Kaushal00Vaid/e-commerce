@@ -8,6 +8,8 @@ interface CartContextType {
   increment: (productId: string, stock?: number) => void; // stock added
   decrement: (productId: string) => void;
   clearCart: () => void;
+
+  buyNow: (product: any) => void;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -44,6 +46,25 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const buyNow = (product: any) => {
+    if (product.stock <= 0) {
+      alert("Product is out of stock!");
+      return;
+    }
+
+    const newCart: CartItem[] = [
+      {
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        image: product.images?.[0]?.url || "",
+        quantity: 1,
+      },
+    ];
+
+    sync(newCart);
+  };
+
   const remove = (productId: string) => {
     sync(cart.filter((c) => c.productId !== productId));
   };
@@ -77,7 +98,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, add, remove, increment, decrement, clearCart }}
+      value={{ cart, add, remove, increment, decrement, clearCart, buyNow }}
     >
       {children}
     </CartContext.Provider>

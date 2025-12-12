@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Product } from "../types/Product";
-import { addToCart } from "../utils/cart";
 import { useCart } from "../context/CartContext";
 
 const ProductDetails = () => {
@@ -11,7 +10,7 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const userToken = localStorage.getItem("token");
 
-  const { cart, add, increment, decrement } = useCart();
+  const { cart, add, increment, decrement, buyNow } = useCart();
   const navigate = useNavigate();
 
   const cartItem = product
@@ -22,12 +21,12 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  const buyNow = async () => {
+  const handleBuyNow = () => {
     if (!userToken) {
       alert("Please login first!");
       return;
     }
-
+    buyNow(product);
     navigate("/checkout");
   };
 
@@ -160,8 +159,13 @@ const ProductDetails = () => {
             )}
 
             <button
-              className="w-full mt-4 bg-[#502e0e] text-white py-3 rounded-lg"
-              onClick={buyNow}
+              disabled={product.stock === 0}
+              className={`w-full mt-4 ${
+                product.stock === 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#502e0e]"
+              } text-white py-3 rounded-lg`}
+              onClick={handleBuyNow}
             >
               Buy Now
             </button>

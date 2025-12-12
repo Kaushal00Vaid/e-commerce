@@ -20,6 +20,9 @@ export const createOrder = async (req: Request, res: Response) => {
           message: `Not enough stock for ${prod.name}`,
         });
       }
+
+      prod.stock -= item.quantity;
+      await prod.save();
     }
 
     const order = await Order.create({
@@ -40,7 +43,8 @@ export const createOrder = async (req: Request, res: Response) => {
 export const getMyOrders = async (req: Request, res: Response) => {
   try {
     const orders = await Order.find({ user: req.user!.id }).populate(
-      "items.product"
+      "items.product",
+      "name images price"
     );
 
     return res.json(orders);
@@ -53,8 +57,8 @@ export const getMyOrders = async (req: Request, res: Response) => {
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
     const orders = await Order.find()
-      .populate("user")
-      .populate("items.product");
+      .populate("user", "name email")
+      .populate("items.product", "name images price");
     return res.json(orders);
   } catch (err) {
     console.error("Get All Orders error:", err);

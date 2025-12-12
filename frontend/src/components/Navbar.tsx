@@ -14,6 +14,9 @@ const Navbar = () => {
   const token = localStorage.getItem("token");
   const adminToken = localStorage.getItem("adminToken");
 
+  const isAdmin = Boolean(adminToken);
+  const isUser = Boolean(token);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("adminToken");
@@ -36,31 +39,52 @@ const Navbar = () => {
           </Link>
 
           {/* DESKTOP MENU */}
+          {/* DESKTOP MENU */}
           <div className="hidden md:flex items-center space-x-6">
-            <NavLink to="/" className={navItemClass}>
-              Home
-            </NavLink>
-            <NavLink to="/products" className={navItemClass}>
-              All Products
-            </NavLink>
-            <NavLink to="/about" className={navItemClass}>
-              About
-            </NavLink>
-            <NavLink to="/contact" className={navItemClass}>
-              Contact
-            </NavLink>
+            {!isAdmin && (
+              <>
+                <NavLink to="/" className={navItemClass}>
+                  Home
+                </NavLink>
+                <NavLink to="/products" className={navItemClass}>
+                  All Products
+                </NavLink>
+                <NavLink to="/orders" className={navItemClass}>
+                  My-Orders
+                </NavLink>
+                <NavLink to="/contact" className={navItemClass}>
+                  Contact
+                </NavLink>
 
-            <NavLink to="/cart" className="relative">
-              <ShoppingCart size={22} className="text-[#7a4d2b]" />
+                {/* Cart only for users */}
+                <NavLink to="/cart" className="relative">
+                  <ShoppingCart size={22} className="text-[#7a4d2b]" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-[#e86f5c] text-white text-[11px] px-1.5 py-0.5 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </NavLink>
+              </>
+            )}
 
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#e86f5c] text-white text-[11px] px-1.5 py-0.5 rounded-full">
-                  {cartCount}
-                </span>
-              )}
-            </NavLink>
+            {/* ADMIN NAVBAR */}
+            {isAdmin && (
+              <>
+                <NavLink to="/admin/products" className={navItemClass}>
+                  Dashboard
+                </NavLink>
+                <NavLink to="/admin/products/new" className={navItemClass}>
+                  Add Product
+                </NavLink>
+                <NavLink to="/admin/orders" className={navItemClass}>
+                  Orders
+                </NavLink>
+              </>
+            )}
 
-            {!token && !adminToken ? (
+            {/* Auth Buttons */}
+            {!isUser && !isAdmin ? (
               <button
                 onClick={() => navigate("/login")}
                 className="ml-4 px-5 py-2 rounded-full bg-primary text-white font-semibold shadow-sm hover:shadow-md transition"
@@ -91,58 +115,88 @@ const Navbar = () => {
       {open && (
         <div className="md:hidden bg-[#faf7f2] border-b border-[#e8dfd2] shadow-lg">
           <div className="flex flex-col px-6 py-4 space-y-3">
-            <NavLink
-              to="/"
-              onClick={() => setOpen(false)}
-              className="py-2 text-[16px] font-medium"
-            >
-              Home
-            </NavLink>
+            {/* User Menu */}
+            {!isAdmin && (
+              <>
+                <NavLink
+                  to="/"
+                  className="py-2 text-[16px]"
+                  onClick={() => setOpen(false)}
+                >
+                  Home
+                </NavLink>
+                <NavLink
+                  to="/products"
+                  className="py-2 text-[16px]"
+                  onClick={() => setOpen(false)}
+                >
+                  All Products
+                </NavLink>
+                <NavLink
+                  to="/about"
+                  className="py-2 text-[16px]"
+                  onClick={() => setOpen(false)}
+                >
+                  About
+                </NavLink>
+                <NavLink
+                  to="/contact"
+                  className="py-2 text-[16px]"
+                  onClick={() => setOpen(false)}
+                >
+                  Contact
+                </NavLink>
 
-            <NavLink
-              to="/products"
-              onClick={() => setOpen(false)}
-              className="py-2 text-[16px] font-medium"
-            >
-              All Products
-            </NavLink>
+                <NavLink
+                  to="/cart"
+                  className="py-2 flex items-center gap-2"
+                  onClick={() => setOpen(false)}
+                >
+                  <ShoppingCart size={18} /> Cart
+                  {cartCount > 0 && (
+                    <span className="ml-auto bg-[#e86f5c] text-white text-[11px] px-2 py-0.5 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </NavLink>
+              </>
+            )}
 
-            <NavLink
-              to="/about"
-              onClick={() => setOpen(false)}
-              className="py-2 text-[16px] font-medium"
-            >
-              About
-            </NavLink>
+            {/* Admin Menu */}
+            {isAdmin && (
+              <>
+                <NavLink
+                  to="/admin/products"
+                  className="py-2 text-[16px]"
+                  onClick={() => setOpen(false)}
+                >
+                  Dashboard
+                </NavLink>
+                <NavLink
+                  to="/admin/add-product"
+                  className="py-2 text-[16px]"
+                  onClick={() => setOpen(false)}
+                >
+                  Add Product
+                </NavLink>
+                <NavLink
+                  to="/admin/orders"
+                  className="py-2 text-[16px]"
+                  onClick={() => setOpen(false)}
+                >
+                  Orders
+                </NavLink>
+              </>
+            )}
 
-            <NavLink
-              to="/contact"
-              onClick={() => setOpen(false)}
-              className="py-2 text-[16px] font-medium"
-            >
-              Contact
-            </NavLink>
-
-            <NavLink
-              to="/cart"
-              onClick={() => setOpen(false)}
-              className="py-2 text-[16px] font-medium flex items-center gap-2"
-            >
-              <ShoppingCart size={18} /> Cart
-              {cartCount > 0 && (
-                <span className="ml-auto bg-[#e86f5c] text-white text-[11px] px-2 py-0.5 rounded-full">
-                  {cartCount}
-                </span>
-              )}
-            </NavLink>
-
-            {!token ? (
+            {/* Auth Buttons */}
+            {!isAdmin && !isUser ? (
               <button
                 onClick={() => {
                   setOpen(false);
                   navigate("/login");
                 }}
-                className="w-full mt-2 px-5 py-2 rounded-full bg-primary text-white font-semibold shadow-sm"
+                className="w-full mt-2 px-5 py-2 rounded-full bg-primary text-white font-semibold"
               >
                 Sign In
               </button>
@@ -152,7 +206,7 @@ const Navbar = () => {
                   setOpen(false);
                   handleLogout();
                 }}
-                className="w-full mt-2 px-5 py-2 rounded-full bg-[#e86f5c] text-white font-semibold shadow-sm"
+                className="w-full mt-2 px-5 py-2 rounded-full bg-[#e86f5c] text-white font-semibold"
               >
                 Logout
               </button>
